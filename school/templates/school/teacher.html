@@ -1,0 +1,202 @@
+{% include "dashboard/header.html" %}
+
+<div class="container">
+
+    <div class="">
+        <div class="card-body p-0">
+            <button type="button" class="btn btn-primary m-5" data-toggle="modal" data-target="#teacherModal">
+                Add New Teacher
+              </button>
+              
+              <!-- Modal -->
+              <div class="modal fade" id="teacherModal" tabindex="-1" role="dialog" aria-labelledby="teacherModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="teacherModalLabel">Add new Teacher</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="  m-5" method="POST" action='' enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                              
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control form-control-user" id="Name"
+                                        placeholder="Name" name="name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control form-control-user" id="Email"
+                                    placeholder="Email Address" name="email">
+                            </div>
+                             <div class="form-group row">
+                              
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control form-control-user" 
+                                        placeholder="Address.." name="address">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user"
+                                        id="exampleInputPassword" placeholder="Phone" name="phone">
+                                </div>
+                                
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12 mb-3 mb-sm-0">
+                                    <select class="form-control "name="gender" id="">
+                                        <option selected  class="form-control "value="">Select Gender</option>
+                                        <option  class="form-control "value="Male">Male</option>
+                                        <option class="form-control"value="Female">Female</option>
+                                        <option class="form-control"value="Others">Others</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12 mb-3 mb-sm-0">
+                                    <input type="number" class="form-control form-control-user"
+                                        id="" placeholder="Salary" name="salary">
+                                </div>
+                                
+                            </div>
+                            <div class="form-group row">
+                              
+                                <div class="col-sm-12">
+                                    <select class="form-control "name="department" id="">
+                                        <option selected  class="form-control "value="">Select Department</option>
+                                        {% for d in department %}
+                                        <option  class="form-control "value="{{d.id}}">{{d.name}}</option>
+                                        {% endfor %}
+                                        
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1">File Upload</label>
+                                <input type="file" class="form-control-file" name="image">
+                              </div>
+
+                          
+                            <hr>
+                           
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Add Teacher</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Nested Row within Card Body -->
+            <div class="row d-flex justify-content-center">
+                
+                <div class="col-md-12">
+                    
+                        {% if response %}   
+                        <div class="alert alert-success" role="alert">
+                          {{response}}
+                        </div>
+                        {% endif %}
+                     
+                    <table class="table m-2 table-bordered table-striped" id="teacher_table">
+                        <thead>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Image</th>
+                            <th>More >></th>
+                        </thead>
+                        <tbody>
+                            {% for t in teachers %}
+                              <tr>
+                                  <td>{{t.name}}</td>
+                                  <td>{{t.department}}</td>
+                                  <td><img src="{{t.image.url}}" class="img-fluid"alt="" width="150" height="150"></td>
+                                  <td><button class="btn btn-primary" data-toggle="modal" data-target="#teacherModal{{t.id}}">View Details</button></td>
+                              </tr>
+                             
+                              
+                              <!-- Teacher Modal -->
+                              <div class="modal fade" id="teacherModal{{t.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="teacherModalLabel">{{t.name}}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="d-flex justify-content-center">
+                                            <img src="{{t.image.url}}" class="img-fluid" alt="" width="150" height="150">
+                                           <br>
+                                           
+                                              
+                                        </div>
+                                        <div class="m-2">
+                                            <h4>Name:</h4> 
+                                            {{t.name}}
+                                            <hr>
+                                            <h4>Department:</h4> 
+                                            {{t.department}}
+                                            <hr>
+                                            <h4>Email:</h4> 
+                                            {{t.email}}
+                                            <hr>
+                                            <h4>Address:</h4> 
+                                            {{t.address}}
+                                            <hr>
+                                            <h4>Phone:</h4> 
+                                            {{t.phone}}
+                                            <hr>
+                                            <h4>gender:</h4> 
+                                            {{t.gender}}
+                                            <hr>
+                                            <h4>Salary:</h4> 
+                                            {{t.salary}}
+                                            <hr>
+
+                                           </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="/delete-teacher/{{t.id}}"><button class="btn btn-danger">Delete Teacher</button></a>
+
+                                        <a href="/update-teacher/{{t.id}}"><button class="btn btn-warning">Update Teacher</button></a>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Image</th>
+                            <th>More >></th>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% include "dashboard/footer.html" %}
+
+<script>
+    $(document).ready( function () {
+    $('#teacher_table').DataTable();
+} );
+</script>
