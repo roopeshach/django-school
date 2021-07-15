@@ -87,16 +87,31 @@ def update_teacher(request, id):
     teacher = Teacher.objects.get(id=id)
     department = Department.objects.all()
     if request.method == 'POST':
-        teacher_form = TeacherForm(request.POST, request.FILES)
-        if teacher_form.is_valid():
-            teacher_form.save()
-            teacher.delete()
-            return redirect('school:teacher')
+        Teacher.objects.get(id=id).update(
+        name= request.POST.name,
+        department = request.POST.department,
+        email = request.POST.email,
+        address = request.POST.address,
+        phone = request.POST.phone,
+        gender = request.POST.gender,
+        salary= request.POST.salary,
+        image = request.FILES.image,
+        )
     
-
-    context = {
+    else:
+        context = {
         'teacher' : teacher,
         'department': department,
         }
 
-    return render(request , 'school/teacher_update.html' , context)
+        return render(request , 'school/teacher_update.html' , context)
+
+class UpdateTeacher( UpdateView):
+
+    def test_func(self):
+        login_url  = 'login/'
+        return(self.request.user)
+    
+    model = Teacher
+
+    fields = ('__all__')
