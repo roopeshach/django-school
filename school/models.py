@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import  reverse
 # Create your models here.
 class school_info(models.Model):
     name = models.CharField(max_length=254)
@@ -52,17 +53,24 @@ class Course(models.Model):
         return str(self.name + self.department.name)
 
 class Teacher(models.Model):
-    
+    genders = [
+        ('Male', 'Male'),
+        ('Female' , 'Female'),
+        ('Others', 'Others')
+    ]
     name = models.CharField(max_length=254)
     department = models.ForeignKey(Department , on_delete=models.CASCADE)
     email = models.CharField(max_length=254 , default=None)
     address = models.CharField(max_length=254 )
     phone = models.CharField(max_length=254)
-    gender = models.CharField(max_length=10)
+    gender = models.CharField(max_length=10, choices=genders)
     salary = models.FloatField()
     image = models.ImageField(null=True , upload_to='teachers/')
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('school:teacher')
 
 
 
