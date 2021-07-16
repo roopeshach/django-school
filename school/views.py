@@ -1,8 +1,8 @@
 from django.shortcuts import render ,redirect
-from .models import Department, Section , Teacher , Student
-from django.views.generic.edit import UpdateView
+from .models import Department, Section , Teacher , Student , Class , Course
+from django.views.generic.edit import UpdateView , CreateView
 
-from .forms import DepartmentForm , SectionForm , TeacherForm , StudentForm
+from .forms import DepartmentForm , SectionForm , TeacherForm , StudentForm , ClassForm , CourseForm
 
 # Create your views here.
 
@@ -83,28 +83,6 @@ def delete_teacher(request , id):
     render(request , 'school/teacher.html' , {'response' : "Teacher deleted successfully"})
     return redirect('school:teacher')
 
-def update_teacher(request, id):
-    teacher = Teacher.objects.get(id=id)
-    department = Department.objects.all()
-    if request.method == 'POST':
-        Teacher.objects.get(id=id).update(
-        name= request.POST.name,
-        department = request.POST.department,
-        email = request.POST.email,
-        address = request.POST.address,
-        phone = request.POST.phone,
-        gender = request.POST.gender,
-        salary= request.POST.salary,
-        image = request.FILES.image,
-        )
-    
-    else:
-        context = {
-        'teacher' : teacher,
-        'department': department,
-        }
-
-        return render(request , 'school/teacher_update.html' , context)
 
 class UpdateTeacher( UpdateView):
 
@@ -115,3 +93,146 @@ class UpdateTeacher( UpdateView):
     model = Teacher
 
     fields = ('__all__')
+
+class student(CreateView):
+    def test_func(self):
+        login_url = 'login/'
+        return(self.request.user)
+
+    
+    def get(self,request):
+        
+        std_form = StudentForm()
+        students = Student.objects.all()
+        context = {
+            'students': students,
+            'std_form' :std_form,
+        }
+        return render(request, 'school/student.html', context)
+    
+    def post(self, request):
+        std_form = StudentForm(request.POST , request.FILES)
+        context = {
+            'std_form' : StudentForm,
+        }
+
+        if std_form.is_valid():
+            std_form.save()
+            return redirect('school:student')
+        else:
+            print(StudentForm.errors)
+            return render(request, 'school/student.html', context)
+  
+        
+        return redirect('school:student')
+
+def delete_student(request , id):
+    Student.objects.get(id=id).delete()
+    render(request , 'school/teacher.html' , {'response' : "Student deleted successfully"})
+    return redirect('school:teacher')
+
+
+class UpdateStudent( UpdateView):
+
+    def test_func(self):
+        login_url  = 'login/'
+        return(self.request.user)
+    
+    model = Student
+
+    fields = ('__all__')
+class manage_class(CreateView):
+    def test_func(self):
+        login_url = 'login/'
+        return(self.request.user)
+
+    
+    def get(self,request):
+        
+        class_form = ClassForm()
+        classes = Class.objects.all()
+        context = {
+            'classes': classes,
+            'class_form' : class_form,
+        }
+        return render(request, 'school/class.html', context)
+    
+    def post(self, request):
+        class_form = ClassForm(request.POST , request.FILES)
+        context = {
+            'class_form' : ClassForm,
+        }
+
+        if class_form.is_valid():
+            c = class_form.save(commit=False)
+            c.save()
+            return redirect('school:class')
+        else:
+            print(ClassForm.errors)
+            return render(request, 'school/class.html', context)
+  
+        
+        return redirect('school:class')
+
+class UpdateClass( UpdateView):
+
+    def test_func(self):
+        login_url  = 'login/'
+        return(self.request.user)
+    
+    model = Class
+
+    fields = ('__all__')
+
+def delete_class(request , id):
+    Class.objects.get(id=id).delete()
+    render(request , 'school/class.html' , {'response' : "Teacher deleted successfully"})
+    return redirect('school:class')
+
+
+class course(CreateView):
+    def test_func(self):
+        login_url = 'login/'
+        return(self.request.user)
+
+    
+    def get(self,request):
+        
+        course_form = CourseForm()
+        courses = Course.objects.all()
+        context = {
+            'courses': courses,
+            'course_form' : course_form,
+        }
+        return render(request, 'school/course.html', context)
+    
+    def post(self, request):
+        course_form = CourseForm(request.POST , request.FILES)
+        context = {
+            'class_form' : course_form,
+        }
+
+        if course_form.is_valid():
+            c = course_form.save(commit=False)
+            c.save()
+            return redirect('school:course')
+        else:
+            return render(request, 'school/course.html', context)
+  
+        
+        return redirect('school:course')
+
+class UpdateCourse( UpdateView):
+
+    def test_func(self):
+        login_url  = 'login/'
+        return(self.request.user)
+    
+    model = Course
+
+    fields = ('__all__')
+    
+def delete_course(request , id):
+    Course.objects.get(id=id).delete()
+    render(request , 'school/course.html' , {'response' : "Course deleted successfully"})
+    return redirect('school:course')

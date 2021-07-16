@@ -1,0 +1,147 @@
+{% include "dashboard/header.html" %}
+
+{% load crispy_forms_tags %}
+<div class="container">
+
+    <div class="">
+        <div class="card-body p-0">
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#teacherModal">
+                Add New Student
+              </button>
+              
+              <!-- Modal -->
+              <div class="modal fade" id="teacherModal" tabindex="-1" role="dialog" aria-labelledby="teacherModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="teacherModalLabel">Add new Student</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="  m-5" method="POST" action='' enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{std_form | crispy}}
+                    </div> 
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Add Teacher</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Nested Row within Card Body -->
+            <div class="row d-flex justify-content-center">
+                
+                <div class="col-md-12">
+                    
+                        {% if response %}   
+                        <div class="alert alert-success" role="alert">
+                          {{response}}
+                        </div>
+                        {% endif %}
+                     
+                    <table class="table m-2 table-bordered table-striped" id="student_table">
+                        <thead>
+                            <th>Name</th>
+                            <th>SID</th>
+                            <th>Class</th>
+                            <th>Image</th>
+                            <th>More </th>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                              <tr>
+                                  <td>{{s.name}}</td>
+                                  <td>{{s.sid}}</td>
+                                  <td>{{s.grade}}</td>
+                                  <td><img src="{{s.image.url}}" class="img-fluid"alt="" width="150" height="150"></td>
+                                  <td><button class="btn btn-primary" data-toggle="modal" data-target="#studentModal{{s.id}}">View Details</button></td>
+                              </tr>
+                             
+                              
+                              <!-- Teacher Modal -->
+                              <div class="modal fade" id="studentModal{{s.id}}" tabindex="-1" role="dialog" aria-labelledby="studentModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="studentModalLabel">{{s.name}}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="d-flex justify-content-center">
+                                            <img src="{{s.image.url}}" class="img-fluid" alt="" width="150" height="150">
+                                           <br>
+                                           
+                                              
+                                        </div>
+                                        <div class="m-2">
+                                            <h4>Name:</h4> 
+                                            {{s.name}}
+                                            <hr>
+                                            <h4>SID:</h4> 
+                                            {{s.sid}}
+                                            <hr>
+                                            <h4>Class:</h4> 
+                                            {{s.grade}}
+                                            <hr>
+                                            <h4>Address:</h4> 
+                                            {{s.address}}
+                                            <hr>
+                                            <h4>Caste:</h4> 
+                                            {{s.caste}}
+                                            <hr>
+                                            <h4>Phone:</h4> 
+                                            {{s.contact}}
+                                            <hr>
+                                            <h4>Father's Name:</h4> 
+                                            {{s.father_name}}
+                                            <hr>
+                                            <h4>Mother's Name:</h4> 
+                                            {{s.mother_name}}
+                                            <hr>
+                                            <h4>DOB:</h4> 
+                                            {{s.dob}}
+                                            <hr>
+                                           </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="/delete-student/{{s.id}}"><button class="btn btn-danger">Delete Student</button></a>
+
+                                        <a href="/update-student/{{s.id}}"><button class="btn btn-warning">Update Student</button></a>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                          <th>Name</th>
+                          <th>SID</th>
+                          <th>Class</th>
+                          <th>Image</th>
+                          <th>More </th>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% include "dashboard/footer.html" %}
+
+<script>
+    $(document).ready( function () {
+    $('#student_table').DataTable();
+} );
+</script>

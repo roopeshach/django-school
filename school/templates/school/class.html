@@ -1,0 +1,85 @@
+{% include "dashboard/header.html" %}
+
+
+{% load crispy_forms_tags %}
+<div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row d-flex justify-content-center">
+                
+                <div class="col-md-6">
+                    
+                        {% if response %}   
+                        <div class="alert alert-success" role="alert">
+                          {{response}}
+                        </div>
+                        {% endif %}
+                     
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Add Class</h1>
+                        </div>
+                        <form class="user" method="POST" action=''>
+                            {% csrf_token %}
+                            {{class_form | crispy}}
+                            
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
+                                Add Class</button>
+                            
+                            <hr>
+                           
+                        </form>
+                        
+                    
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Classes</h1>
+                        </div>
+                    
+                    <table class="table table-borderd table-striped p-5">
+                        <thead>
+                            <th>Name</th>
+                            <th>Section</th>
+                            <th>Class Teacher</th>
+                            <th>Edit</th>
+                        </thead>
+                        <tbody>
+                            {% for c in classes %}
+                                <tr>
+                                    <td>{{c.name}}</td>
+                                    <td>{{c.section}}</td>
+                                    <td>{{c.class_teacher}}</td>
+                                    <td>
+                                        <a href="delete-class/{{c.id}}"><i class="fa fa-trash"></i></a>
+                                        <a href="update-class/{{c.id}}"><i class="fa fa-edit ml-2"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+{% include "dashboard/footer.html" %}
