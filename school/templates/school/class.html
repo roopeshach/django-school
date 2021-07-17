@@ -36,19 +36,31 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
 
+</div>
 
-                <div class="col-md-6">
+<div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12">
                     <div class="p-5">
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Classes</h1>
                         </div>
                     
-                    <table class="table table-borderd table-striped p-5">
+                    <table class="table table-borderd table-striped p-5" id="class_table">
                         <thead>
                             <th>Name</th>
                             <th>Section</th>
                             <th>Class Teacher</th>
+                            <th>Add Course</th>
+                            <th>Manage Courses</th>
                             <th>Edit</th>
                         </thead>
                         <tbody>
@@ -58,15 +70,64 @@
                                     <td>{{c.section}}</td>
                                     <td>{{c.class_teacher}}</td>
                                     <td>
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#courseModal{{c.id}}">Add Course</button>
+                                    </td>
+                                    <div class="modal fade" id="courseModal{{c.id}}" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="courseModalLabel">Add Course for {{c.name}} `{{c.section}}`</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="user" method="POST" action=''>
+                                                    {% csrf_token %}
+                                                    {{course_form | crispy}}
+                                                    <div class="form-text">
+                                                        
+                                                            Ex : [11:00 AM - 11.45 AM (Sun- Fri)]
+                                                        
+                                                    </div>
+                                                    <br>
+                                                    <input type="hidden" value="{{c.id}}" name="grade">
+                                                    
+                                                   
+                                             
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                              <button type="submit" class="btn btn-primary">Add Course</button>
+                                            </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <td>
+                                        <a href="class_course/{{c.id}}"><button class="btn btn-primary">Manage Course</button></a>
+                                    </td>
+                                    <td>
                                         <a href="delete-class/{{c.id}}"><i class="fa fa-trash"></i></a>
                                         <a href="update-class/{{c.id}}"><i class="fa fa-edit ml-2"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <th>Name</th>
+                            <th>Section</th>
+                            <th>Class Teacher</th>
+                            <th>Add Course</th>
+                            <th>Manage Courses</th>
+                            <th>Edit</th>
+                        </tfoot>
                     </table>
                 </div>
                 </div>
+                
+                </div>
+
             </div>
         </div>
     </div>
@@ -83,3 +144,9 @@
 
 
 {% include "dashboard/footer.html" %}
+
+<script>
+    $(document).ready( function () {
+    $('#class_table').DataTable();
+} );
+</script>

@@ -87,7 +87,6 @@ class Course(models.Model):
     ]
     name = models.CharField(max_length=200)
     grade = models.ForeignKey(Class, on_delete=models.CASCADE)
-
     course_type = models.CharField(max_length=20, choices=types)
     course_time = models.CharField(max_length=254)
     def get_absolute_url(self):
@@ -95,7 +94,7 @@ class Course(models.Model):
 
 
     def __str__(self):
-        return str(self.name + self.department.name)
+        return str(self.name + "-" + self.grade.name)
 
 
 class Student(models.Model):

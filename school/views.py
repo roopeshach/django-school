@@ -151,29 +151,57 @@ class manage_class(CreateView):
     def get(self,request):
         
         class_form = ClassForm()
+        course_form = CourseForm()
         classes = Class.objects.all()
         context = {
             'classes': classes,
             'class_form' : class_form,
+            'course_form' : course_form,
         }
         return render(request, 'school/class.html', context)
     
     def post(self, request):
-        class_form = ClassForm(request.POST , request.FILES)
-        context = {
-            'class_form' : ClassForm,
-        }
+        classes = Class.objects.all()
+        if 'section' in request.POST:
 
-        if class_form.is_valid():
-            c = class_form.save(commit=False)
-            c.save()
+            class_form = ClassForm(request.POST , request.FILES)
+            context = {
+                'class_form' : ClassForm,
+                'classes': classes,
+            }
+
+            if class_form.is_valid():
+                c = class_form.save(commit=False)
+                c.save()
+                return redirect('school:class')
+            else:
+                print(ClassForm.errors)
+                return render(request, 'school/class.html', context)
+    
+            
             return redirect('school:class')
-        else:
-            print(ClassForm.errors)
-            return render(request, 'school/class.html', context)
-  
         
-        return redirect('school:class')
+        elif 'grade' in request.POST:
+           
+            course_form = CourseForm(request.POST, request.FILES)
+            context = {
+                'course_form' : course_form,
+                'classes': classes,
+            }
+
+            if course_form.is_valid():
+                c = course_form.save(commit=False)
+                grade = Class.objects.get(id=request.POST['grade'])
+                c.grade = grade
+                
+                c.save()
+                return redirect('school:class')
+            else:
+                return render(request, 'school/class.html', context)
+    
+            
+            return redirect('school:course')
+
 
 class UpdateClass( UpdateView):
 
@@ -209,7 +237,7 @@ class course(CreateView):
     def post(self, request):
         course_form = CourseForm(request.POST , request.FILES)
         context = {
-            'class_form' : course_form,
+            'course_form' : course_form,
         }
 
         if course_form.is_valid():
