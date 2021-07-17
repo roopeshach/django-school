@@ -131,7 +131,6 @@ def delete_student(request , id):
     render(request , 'school/teacher.html' , {'response' : "Student deleted successfully"})
     return redirect('school:teacher')
 
-
 class UpdateStudent( UpdateView):
 
     def test_func(self):
@@ -141,6 +140,8 @@ class UpdateStudent( UpdateView):
     model = Student
 
     fields = ('__all__')
+
+
 class manage_class(CreateView):
     def test_func(self):
         login_url = 'login/'
@@ -189,7 +190,6 @@ def delete_class(request , id):
     render(request , 'school/class.html' , {'response' : "Teacher deleted successfully"})
     return redirect('school:class')
 
-
 class course(CreateView):
     def test_func(self):
         login_url = 'login/'
@@ -236,3 +236,4 @@ def delete_course(request , id):
     Course.objects.get(id=id).delete()
     render(request , 'school/course.html' , {'response' : "Course deleted successfully"})
     return redirect('school:course')
+

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'school',
     'auths',
     'dashboard',
+    'exam',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

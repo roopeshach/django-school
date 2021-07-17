@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('' , include(('school.urls', 'school') , namespace='school')),
     path('' , include(('auths.urls', 'auth') , namespace="auth")),
-    path('' , include(('dashboard.urls', 'auth') , namespace="dashboard")),
+    path('' , include(('dashboard.urls', 'dashboard') , namespace="dashboard")),
+    path('' , include(('exam.urls', 'exam') , namespace="exam")),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
